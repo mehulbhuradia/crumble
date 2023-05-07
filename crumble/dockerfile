@@ -1,0 +1,20 @@
+# Use the official Node.js image as the base image
+FROM node:latest
+
+# Set the working directory inside the container
+WORKDIR /root
+
+# Copy the entire app code to the container
+COPY ./ /root/
+
+# Install dependencies
+RUN npm install
+
+# Build the app for production
+RUN npm run build
+
+# Expose the container port
+EXPOSE 3000
+
+# Define the command to start the app
+CMD ["npm", "start"]
