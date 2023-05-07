@@ -13,6 +13,12 @@ RUN pip install -r requirements.txt
 # Copy the application code to the container
 COPY app.py /root/
 
+# Copy the application code to the container
+COPY .env /root/
+
+# Expose the container port
+EXPOSE 8000
+
 # Set the entrypoint and default command for the container
 ENTRYPOINT ["python"]
 CMD ["app.py"]

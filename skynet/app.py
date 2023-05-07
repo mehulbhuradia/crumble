@@ -28,29 +28,10 @@ class MagicInput(BaseModel):
 async def magic(input_data: MagicInput):
     textInput = input_data.textInput
     pageContent = input_data.pageContent
-
-    prompt = f"""
-        Use the following text input: {textInput}
-
-        Based on the input, modify and style the HTML below:
-
-        {pageContent}
-
-        Make sure to keep the textbox and the submit button unless the text input explicitly suggests removing them. However, you may modify their style based on the input.
-
-        Here are some specific instructions to follow:
-
-        - If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.
-        - If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.
-        - If the text input suggests a change to an existing component, modify that component as necessary.
-        - If the text input suggests removing a component, explicitly state which component(s) should be removed.
-
-        Be creative and use your best judgement to create a visually appealing and functional page based on the user's input. Note that if the word "exit" is used in the input, the application should terminate.
-        """
     try:
         response = openai.Completion.create(
             model="text-davinci-003",
-            prompt=prompt,
+            prompt=f"Use the following text input: {textInput}\n\nBased on the input, modify and style the HTML below:\n\n{pageContent}\n\nMake sure to keep any existing components unless explicitly mentioned. Here are some specific instructions to follow:\n\n- If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.\n- If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.\n- If the text input suggests a change to an existing component, modify that component as necessary.\n- If the text input suggests removing a component, explicitly state which component(s) should be removed.\n\nBe creative and use your best judgement to create a visually appealing and functional page based on the user's input.",
             max_tokens=1024,
             n=1,
             temperature=0,

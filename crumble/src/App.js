@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 
 function Crumble() {
-  const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState("");
   const [textInput, setTextInput] = useState("");
   const [pageContent, setPageContent] = useState("");
 
