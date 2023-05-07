@@ -19,21 +19,23 @@ app.add_middleware(
 
 openai.api_key = os.getenv('GPT_API_KEY')
 
-class TextInput(BaseModel):
-    textInput: str
 
-@app.post("/api/correct-text")
-async def correct_text(input_data: TextInput):
+class MagicInput(BaseModel):
+    textInput: str
+    pageContent: str
+
+@app.post("/api/magic")
+async def magic(input_data: MagicInput):
     textInput = input_data.textInput
+    pageContent = input_data.pageContent
 
     try:
         response = openai.Completion.create(
-            engine="code-davinci-edit-001",
-            prompt=f"Fix the spelling mistakes:\n{textInput}",
-            max_tokens=150,
+            model="text-davinci-003",
+            prompt=f"Modify and style the HTML based on the following text:\n{textInput}\n\nAnd the HTML:\n{pageContent}",
+            max_tokens=1024,
             n=1,
-            stop=None,
-            temperature=0.5,
+            temperature=0,
         )
         return response.choices[0].text.strip()
     except Exception as error:

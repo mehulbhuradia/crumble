@@ -4,20 +4,19 @@ import axios from "axios";
 function Crumble() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
-  const [textInput, setTextInput] = useState(""); // Add this line back
-  const [pageContent, setPageContent] = useState(""); // Add this line to create a state variable for the page content
+  const [textInput, setTextInput] = useState("");
+  const [pageContent, setPageContent] = useState("");
 
-  const pageRef = useRef(); // Add this line to create a ref for the page
+  const pageRef = useRef();
+
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/correct-text",
-        {
-          textInput,
-        }
-      );
+      const response = await axios.post("http://localhost:8000/api/magic", {
+        textInput,
+        pageContent, // Add pageContent to the request payload
+      });
 
       console.log("OpenAI Response:", response.data);
       setPageContent(response.data);

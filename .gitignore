@@ -1,2 +1,3 @@
 /skynet/.env
 /crumble/node_modules
+/skynet/__pycache__
