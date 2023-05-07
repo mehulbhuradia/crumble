@@ -11,10 +11,13 @@ function Crumble() {
     console.log(`Text input: ${textInput}`);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/magic", {
-        textInput,
-        pageContent, // Add pageContent to the request payload
-      });
+      const response = await axios.post(
+        "http://174.138.12.156:8000/api/magic",
+        {
+          textInput,
+          pageContent, // Add pageContent to the request payload
+        }
+      );
 
       console.log("OpenAI Response:", response.data);
       setPageContent(response.data);
