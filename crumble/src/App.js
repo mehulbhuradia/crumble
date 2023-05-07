@@ -12,7 +12,7 @@ function Crumble() {
 
     try {
       const response = await axios.post(
-        "http://174.138.12.156:8000/api/magic",
+        "https://api.blazinglyfaster.com/api/magic",
         {
           textInput,
           pageContent, // Add pageContent to the request payload
