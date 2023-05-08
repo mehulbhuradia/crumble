@@ -8,11 +8,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-          fetch-depth: 0
-      - name: git pull
-        run: git pull
       - name: Delete old .env file
         working-directory: ./skynet
         run: |
@@ -27,6 +22,7 @@ jobs:
           echo "GPT_API_KEY=${GPT_API_KEY}" >> .env
       - name: Build and Run
         run: |
+          git pull
           docker-compose down
           docker-compose build --no-cache
           docker-compose up -d
