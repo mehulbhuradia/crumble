@@ -28,29 +28,56 @@ function Crumble() {
 
   const html = (
     <div
-      className="flex flex-col items-center justify-center h-screen"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
       ref={pageRef}
     >
-      <div className="flex flex-col items-center space-y-2">
-        <label htmlFor="textInput" className="text-xl font-semibold">
-          How would you like to change the website?
-        </label>
-        <div className="flex space-x-2 items-center">
-          <input
-            type="text"
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-            placeholder="Enter some text"
-            id="textInput"
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
-          />
-          <button
-            onClick={handleTextSubmit}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Submit
-          </button>
-        </div>
+      <label
+        htmlFor="textInput"
+        style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "16px" }}
+      >
+        How would you like to change the website?
+      </label>
+      <div
+        style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}
+      >
+        <input
+          type="text"
+          value={textInput}
+          onChange={(e) => setTextInput(e.target.value)}
+          placeholder="Enter some text"
+          id="textInput"
+          style={{
+            width: "400px",
+            height: "48px",
+            padding: "8px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
+        />
+        <button
+          onClick={handleTextSubmit}
+          style={{
+            marginLeft: "16px",
+            width: "120px",
+            height: "48px",
+            fontSize: "16px",
+            fontWeight: "bold",
+            color: "#fff",
+            backgroundColor: "#6b46c1",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
