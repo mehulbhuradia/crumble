@@ -1,4 +1,4 @@
-name: Release
+name: Prod Release
 # only trigger on tags, `verify` has already been triggered by push to PR
 on:
   push:
