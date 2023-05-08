@@ -27,21 +27,30 @@ function Crumble() {
   };
 
   const html = (
-    <div className="space-y-4" ref={pageRef}>
-      <div className="flex space-x-2">
-        <input
-          type="text"
-          value={textInput}
-          onChange={(e) => setTextInput(e.target.value)}
-          placeholder="Enter some text"
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
-        />
-        <button
-          onClick={handleTextSubmit}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Submit
-        </button>
+    <div
+      className="flex flex-col items-center justify-center h-screen"
+      ref={pageRef}
+    >
+      <div className="flex flex-col items-center space-y-2">
+        <label htmlFor="textInput" className="text-xl font-semibold">
+          How would you like to change the website?
+        </label>
+        <div className="flex space-x-2 items-center">
+          <input
+            type="text"
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
+            placeholder="Enter some text"
+            id="textInput"
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
+          />
+          <button
+            onClick={handleTextSubmit}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );
