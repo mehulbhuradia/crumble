@@ -22,7 +22,6 @@ jobs:
           echo "GPT_API_KEY=${GPT_API_KEY}" >> .env
       - name: Build and Run
         run: |
-          git pull
           docker-compose down
           docker-compose build --no-cache
           docker-compose up -d
