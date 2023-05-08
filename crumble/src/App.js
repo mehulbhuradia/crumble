@@ -1,41 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
-function Crumble() {
-  const [textInput, setTextInput] = useState("");
-  const [pageContent, setPageContent] = useState("");
-
-  const pageRef = useRef();
-
-  const handleTextSubmit = async () => {
-    console.log(`Text input: ${textInput}`);
-
-    try {
-      const response = await axios.post(
-        "https://api.blazinglyfaster.com/api/magic",
-        {
-          textInput,
-          pageContent, // Add pageContent to the request payload
-        }
-      );
-
-      console.log("OpenAI Response:", response.data);
-      setPageContent(response.data);
-    } catch (error) {
-      console.error("Error in API call:", error);
-    }
-  };
-
-  const html = (
+const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
+  return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        height: "18vh",
       }}
-      ref={pageRef}
     >
       <label
         htmlFor="textInput"
@@ -81,14 +56,44 @@ function Crumble() {
       </div>
     </div>
   );
+};
+
+function Crumble() {
+  const [textInput, setTextInput] = useState("");
+  const [pageContent, setPageContent] = useState("");
+
+  const handleTextSubmit = async () => {
+    console.log(`Text input: ${textInput}`);
+
+    try {
+      const response = await axios.post(
+        "https://api.blazinglyfaster.com/api/magic",
+        // "http://localhost:8000/api/magic",
+        {
+          textInput,
+          pageContent,
+        }
+      );
+
+      console.log("OpenAI Response:", response.data);
+      setPageContent(response.data);
+    } catch (error) {
+      console.error("Error in API call:", error);
+    }
+  };
 
   return (
     <>
-      {pageContent ? (
-        <div dangerouslySetInnerHTML={{ __html: pageContent }} />
-      ) : (
-        html
-      )}
+      <InputForm
+        textInput={textInput}
+        setTextInput={setTextInput}
+        handleTextSubmit={handleTextSubmit}
+      />
+      <div
+        dangerouslySetInnerHTML={{
+          __html: pageContent,
+        }}
+      />
     </>
   );
 }
