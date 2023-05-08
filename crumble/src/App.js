@@ -30,7 +30,8 @@ function Crumble() {
 
     try {
       const response = await axios.post(
-        "https://api.blazinglyfaster.com/api/magic",
+        // "https://api.blazinglyfaster.com/api/magic",
+        "http://localhost:8000/api/magic",
         {
           textInput,
           pageContent,
