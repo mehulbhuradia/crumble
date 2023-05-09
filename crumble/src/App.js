@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import PropellerAds from './PropellerAds';
-
+import PropellerAds from "./PropellerAds";
 
 const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
   return (
@@ -60,11 +59,11 @@ const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
   );
 };
 
-
-
 function Crumble() {
   const [textInput, setTextInput] = useState("");
-  const [pageContent, setPageContent] = useState("");
+  const [pageContent, setPageContent] = useState(
+    "<!DOCTYPE html><html>  <head>  </head>  <body>  </body></html>"
+  );
 
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
@@ -88,8 +87,13 @@ function Crumble() {
 
   return (
     <>
-      <PropellerAds adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)"/>
-      <PropellerAds async = {true} dcfa = {true} adCode={""} src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"/>
+      <PropellerAds adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)" />
+      <PropellerAds
+        async={true}
+        dcfa={true}
+        adCode={""}
+        src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
+      />
       <InputForm
         textInput={textInput}
         setTextInput={setTextInput}
