@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import JankyScript from './JankyScript';
-
+import JankyScript from "./JankyScript";
 
 const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
   return (
@@ -65,6 +64,7 @@ function Crumble() {
   const [pageContent, setPageContent] = useState(
     "<!DOCTYPE html><html>  <head>  </head>  <body>  </body></html>"
   );
+  const [jsCode, setJsCode] = useState(null);
 
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
@@ -78,9 +78,17 @@ function Crumble() {
           pageContent,
         }
       );
-
       console.log("OpenAI Response:", response.data);
       setPageContent(response.data);
+      const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+      const scriptContent = [];
+      response.data.replace(
+        scriptRegex,
+        function (fullMatch, scriptContentMatch) {
+          scriptContent.push(scriptContentMatch.trim());
+        }
+      );
+      setJsCode(scriptContent[0]);
     } catch (error) {
       console.error("Error in API call:", error);
     }
@@ -89,13 +97,19 @@ function Crumble() {
 
   return (
     <>
-      <JankyScript adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)"/>
-      <JankyScript async = {true} dcfa = {true} adCode={""} src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"/>
+      <JankyScript adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)" />
+      <JankyScript
+        async={true}
+        dcfa={true}
+        adCode={""}
+        src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
+      />
       <InputForm
         textInput={textInput}
         setTextInput={setTextInput}
         handleTextSubmit={handleTextSubmit}
       />
+      {jsCode && <JankyScript adCode={jsCode} />}
       <div
         dangerouslySetInnerHTML={{
           __html: pageContent,
