@@ -60,11 +60,11 @@ const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
   );
 };
 
-
-
 function Crumble() {
   const [textInput, setTextInput] = useState("");
-  const [pageContent, setPageContent] = useState("");
+  const [pageContent, setPageContent] = useState(
+    "<!DOCTYPE html><html>  <head>  </head>  <body>  </body></html>"
+  );
 
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
@@ -84,6 +84,7 @@ function Crumble() {
     } catch (error) {
       console.error("Error in API call:", error);
     }
+    setTextInput("");
   };
 
   return (
