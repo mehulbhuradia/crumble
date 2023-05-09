@@ -1,0 +1,29 @@
+name: Prod Release
+# only trigger on tags, `verify` has already been triggered by push to PR
+on:
+  push:
+    branches: ["master"]
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Delete old .env file
+        working-directory: ./skynet
+        run: |
+          if [ -f .env ]; then
+            rm .env
+          fi
+      - name: Create .env file
+        working-directory: ./skynet
+        env:
+          GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
+        run: |
+          echo "GPT_API_KEY=${GPT_API_KEY}" >> .env
+      - name: Build and Run
+        run: |
+          docker-compose down
+          docker-compose build --no-cache
+          docker-compose up -d --force-recreate

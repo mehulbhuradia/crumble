@@ -1,29 +1,70 @@
 import React, { useState } from "react";
 import axios from "axios";
+import JankyScript from "./JankyScript";
 
 const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
   return (
-    <div className="flex space-x-2">
-      <input
-        type="text"
-        value={textInput}
-        onChange={(e) => setTextInput(e.target.value)}
-        placeholder="Enter some text"
-        className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
-      />
-      <button
-        onClick={handleTextSubmit}
-        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "18vh",
+      }}
+    >
+      <label
+        htmlFor="textInput"
+        style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "16px" }}
       >
-        Submit
-      </button>
+        How would you like to change the website?
+      </label>
+      <div
+        style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}
+      >
+        <input
+          type="text"
+          value={textInput}
+          onChange={(e) => setTextInput(e.target.value)}
+          placeholder="Enter some text"
+          id="textInput"
+          style={{
+            width: "400px",
+            height: "48px",
+            padding: "8px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
+        />
+        <button
+          onClick={handleTextSubmit}
+          style={{
+            marginLeft: "16px",
+            width: "120px",
+            height: "48px",
+            fontSize: "16px",
+            fontWeight: "bold",
+            color: "#fff",
+            backgroundColor: "#6b46c1",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
 
 function Crumble() {
   const [textInput, setTextInput] = useState("");
-  const [pageContent, setPageContent] = useState("");
+  const [pageContent, setPageContent] = useState(
+    "<!DOCTYPE html><html>  <head>  </head>  <body>  </body></html>"
+  );
+  const [jsCode, setJsCode] = useState(null);
 
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
@@ -37,23 +78,39 @@ function Crumble() {
           pageContent,
         }
       );
-
       console.log("OpenAI Response:", response.data);
       setPageContent(response.data);
+      const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
+      const scriptContent = [];
+      response.data.replace(
+        scriptRegex,
+        function (fullMatch, scriptContentMatch) {
+          scriptContent.push(scriptContentMatch.trim());
+        }
+      );
+      setJsCode(scriptContent[0]);
     } catch (error) {
       console.error("Error in API call:", error);
     }
+    setTextInput("");
   };
 
   return (
     <>
+      <JankyScript adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)" />
+      <JankyScript
+        async={true}
+        dcfa={true}
+        adCode={""}
+        src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
+      />
       <InputForm
         textInput={textInput}
         setTextInput={setTextInput}
         handleTextSubmit={handleTextSubmit}
       />
+      {jsCode && <JankyScript adCode={jsCode} />}
       <div
-        className="space-y-4"
         dangerouslySetInnerHTML={{
           __html: pageContent,
         }}

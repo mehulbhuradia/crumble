@@ -28,41 +28,36 @@ class MagicInput(BaseModel):
 async def magic(input_data: MagicInput):
     textInput = input_data.textInput
     pageContent = input_data.pageContent
-    gpt_prompt=f"Use the following text input: {textInput}\n\nBased on the input, modify and style the HTML below:\n\n{pageContent}\n\nMake sure to keep any existing components unless explicitly mentioned. Here are some specific instructions to follow:\n\n- If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.\n- If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.\n- If the text input suggests a change to an existing component, modify that component as necessary.\n- If the text input suggests removing a component, explicitly state which component(s) should be removed.\n\nBe creative and use your best judgement to create a visually appealing and functional page based on the user's input."
-    message=[{"role": "user", "content": gpt_prompt}]
+    
+    gpt_prompt = f"""HTML:
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
+    {pageContent}
+
+    Input:
+
+    {textInput}
+
+    Based on the input, please modify the HTML as follows:
+    - Only return HTML code as the output.
+    - If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.
+    - If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.
+    - If the text input suggests a change to an existing component, modify that component as necessary.
+    - If the text input suggests removing a component, explicitly state which component(s) should be removed.
+
+    Be creative and use your best judgement to create a visually appealing and functional page based on the user's input. CODE ONLY"""
+    message=[{"role": "user", "content": gpt_prompt}]
+    try:
+        response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
         messages = message,
         temperature=0.2,
-        max_tokens=4000,
+        max_tokens=1000,
         frequency_penalty=0.0
-    )
-    print(response.choices[0].message.content)
-    return response.choices[0].message.content
-    # try:
-    #     gpt_prompt=f"Use the following text input: {textInput}\n\nBased on the input, modify and style the HTML below:\n\n{pageContent}\n\nMake sure to keep any existing components unless explicitly mentioned. Here are some specific instructions to follow:\n\n- If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.\n- If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.\n- If the text input suggests a change to an existing component, modify that component as necessary.\n- If the text input suggests removing a component, explicitly state which component(s) should be removed.\n\nBe creative and use your best judgement to create a visually appealing and functional page based on the user's input."
-    #     message=[{"role": "user", "content": gpt_prompt}]
-    #     response = openai.ChatCompletion.create(
-    #         model="gpt-4",
-    #         messages = message,
-    #         temperature=0.2,
-    #         max_tokens=1000,
-    #         frequency_penalty=0.0
-    #     )
-
-    #     # response = openai.Completion.create(
-    #     #     # model="text-davinci-003",
-    #     #     model = "gpt-4",
-    #     #     prompt=f"Use the following text input: {textInput}\n\nBased on the input, modify and style the HTML below:\n\n{pageContent}\n\nMake sure to keep any existing components unless explicitly mentioned. Here are some specific instructions to follow:\n\n- If the text input contains a specific keyword or phrase, add a new section to the HTML with relevant content.\n- If the text input mentions a specific color or font, change the style of the relevant section(s) in the HTML to match.\n- If the text input suggests a change to an existing component, modify that component as necessary.\n- If the text input suggests removing a component, explicitly state which component(s) should be removed.\n\nBe creative and use your best judgement to create a visually appealing and functional page based on the user's input.",
-    #     #     max_tokens=1024,
-    #     #     n=1,
-    #     #     temperature=0,
-    #     # )
-    #     return response.choices[0].text.strip()
-    # except Exception as error:
-    #     print("Error in OpenAI API call:", error)
-    #     return {"error": "Error in OpenAI API call"}
+        )
+        return response.choices[0].message.content
+    except Exception as error:
+        print("Error in OpenAI API call:", error)
+        return {"error": "Error in OpenAI API call"}
 
 if __name__ == "__main__":
     import uvicorn
