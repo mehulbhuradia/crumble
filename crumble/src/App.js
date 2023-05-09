@@ -83,6 +83,7 @@ function Crumble() {
     } catch (error) {
       console.error("Error in API call:", error);
     }
+    setTextInput("");
   };
 
   return (
