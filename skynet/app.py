@@ -48,10 +48,10 @@ async def magic(input_data: MagicInput):
     message=[{"role": "user", "content": gpt_prompt}]
     try:
         response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages = message,
         temperature=0.2,
-        max_tokens=1000,
+        max_tokens=5000,
         frequency_penalty=0.0
         )
         return response.choices[0].message.content
