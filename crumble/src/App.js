@@ -88,8 +88,7 @@ function Crumble() {
 
   return (
     <>
-      <PropellerAds adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)"/>
-      <PropellerAds async = {true} dcfa = {true} adCode={""} src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"/>
+      <PropellerAds adCode={"(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935546,document.body||document.documentElement)"}/>
       <InputForm
         textInput={textInput}
         setTextInput={setTextInput}
