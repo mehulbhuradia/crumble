@@ -35,7 +35,7 @@ async def magic(input_data: MagicInput):
         model="gpt-4",
         messages = message,
         temperature=0.2,
-        max_tokens=1000,
+        max_tokens=4000,
         frequency_penalty=0.0
     )
     print(response.choices[0].message.content)
