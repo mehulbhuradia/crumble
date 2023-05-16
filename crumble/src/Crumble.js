@@ -2,8 +2,45 @@ import React, { useState } from "react";
 import axios from "axios";
 import JankyScript from "./JankyScript";
 import Spinner from "./Spinner";
+import { FaShareSquare } from 'react-icons/fa';
 
-const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
+const ShareButton = ({ handleShare }) => (
+  <button
+    onClick={handleShare}
+    style={{
+      marginLeft: "16px",
+      width: "120px",
+      height: "48px",
+      fontSize: "16px",
+      fontWeight: "bold",
+      color: "#fff",
+      backgroundColor: "#6b46c1",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer",
+    }}
+    // style={{
+    //   display: "flex",
+    //   alignItems: "center",
+    //   justifyContent: "center",
+    //   marginTop: "16px",
+    //   width: "120px",
+    //   height: "48px",
+    //   fontSize: "16px",
+    //   fontWeight: "bold",
+    //   color: "#fff",
+    //   backgroundColor: "#6b46c1",
+    //   border: "none",
+    //   borderRadius: "4px",
+    //   cursor: "pointer",
+    // }}
+  >
+    <FaShareSquare style={{ marginRight: '8px' }} />
+    Share
+  </button>
+);
+
+const InputForm = ({ textInput, setTextInput, handleTextSubmit, handleShare }) => {
   return (
     <div
       style={{
@@ -55,34 +92,12 @@ const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
         >
           Submit
         </button>
+        <ShareButton handleShare={handleShare}/>
       </div>
     </div>
   );
 };
 
-const ShareButton = ({ handleShare }) => (
-  <button
-    onClick={handleShare}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: "16px",
-      width: "120px",
-      height: "48px",
-      fontSize: "16px",
-      fontWeight: "bold",
-      color: "#fff",
-      backgroundColor: "#6b46c1",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-    }}
-  >
-    <FaShareSquare style={{ marginRight: '8px' }} />
-    Share
-  </button>
-);
 
 function Crumble() {
   const [textInput, setTextInput] = useState("");
@@ -126,7 +141,9 @@ function Crumble() {
 
   const handleShare = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.post('https://api.blazinglyfaster.com/api/store', { html: pageContent});
+      setIsLoading(false)
       const uuid = response.data;
       const newLink = `https://blazinglyfaster.com/${uuid}`;
       setShareLink(newLink);
@@ -147,18 +164,21 @@ function Crumble() {
         adCode={""}
         src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
       />
-      <InputForm
-        textInput={textInput}
-        setTextInput={setTextInput}
-        handleTextSubmit={handleTextSubmit}
-      />
-      <Spinner isLoading={isLoading}/>
-      {jsCode && <JankyScript adCode={jsCode} />}
-      <div
-        dangerouslySetInnerHTML={{
-          __html: pageContent,
-        }}
-      />
+      <div >
+        <InputForm
+          textInput={textInput}
+          setTextInput={setTextInput}
+          handleTextSubmit={handleTextSubmit}
+          handleShare={handleShare}
+        />
+        <Spinner isLoading={isLoading}/>
+        {jsCode && <JankyScript adCode={jsCode} />}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: pageContent,
+          }}
+        />
+      </div>
     </>
   );
 }
