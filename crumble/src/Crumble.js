@@ -1,8 +1,46 @@
 import React, { useState } from "react";
 import axios from "axios";
 import JankyScript from "./JankyScript";
+import Spinner from "./Spinner";
+import { FaShareSquare } from 'react-icons/fa';
 
-const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
+const ShareButton = ({ handleShare }) => (
+  <button
+    onClick={handleShare}
+    style={{
+      marginLeft: "16px",
+      width: "120px",
+      height: "48px",
+      fontSize: "16px",
+      fontWeight: "bold",
+      color: "#fff",
+      backgroundColor: "#6b46c1",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer",
+    }}
+    // style={{
+    //   display: "flex",
+    //   alignItems: "center",
+    //   justifyContent: "center",
+    //   marginTop: "16px",
+    //   width: "120px",
+    //   height: "48px",
+    //   fontSize: "16px",
+    //   fontWeight: "bold",
+    //   color: "#fff",
+    //   backgroundColor: "#6b46c1",
+    //   border: "none",
+    //   borderRadius: "4px",
+    //   cursor: "pointer",
+    // }}
+  >
+    <FaShareSquare style={{ marginRight: '8px' }} />
+    Share
+  </button>
+);
+
+const InputForm = ({ textInput, setTextInput, handleTextSubmit, handleShare }) => {
   return (
     <div
       style={{
@@ -54,10 +92,12 @@ const InputForm = ({ textInput, setTextInput, handleTextSubmit }) => {
         >
           Submit
         </button>
+        <ShareButton handleShare={handleShare}/>
       </div>
     </div>
   );
 };
+
 
 function Crumble() {
   const [textInput, setTextInput] = useState("");
@@ -65,11 +105,14 @@ function Crumble() {
     "<!DOCTYPE html><html>  <head>  </head>  <body>  </body></html>"
   );
   const [jsCode, setJsCode] = useState(null);
+  const [shareLink, setShareLink] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleTextSubmit = async () => {
     console.log(`Text input: ${textInput}`);
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         "https://api.blazinglyfaster.com/api/magic",
         // "http://localhost:8000/api/magic",
@@ -78,6 +121,7 @@ function Crumble() {
           pageContent,
         }
       );
+      setIsLoading(false);
       console.log("OpenAI Response:", response.data);
       setPageContent(response.data);
       const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
@@ -95,6 +139,22 @@ function Crumble() {
     setTextInput("");
   };
 
+  const handleShare = async () => {
+    try {
+      setIsLoading(true)
+      const response = await axios.post('https://api.blazinglyfaster.com/api/store', { html: pageContent});
+      setIsLoading(false)
+      const uuid = response.data;
+      const newLink = `https://blazinglyfaster.com/${uuid}`;
+      setShareLink(newLink);
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(newLink);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <JankyScript adCode="(function(s,u,z,p){s.src=u,s.setAttribute('data-zone',z),p.appendChild(s);})(document.createElement('script'),'https://inklinkor.com/tag.min.js',5935568,document.body||document.documentElement)" />
@@ -104,17 +164,21 @@ function Crumble() {
         adCode={""}
         src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
       />
-      <InputForm
-        textInput={textInput}
-        setTextInput={setTextInput}
-        handleTextSubmit={handleTextSubmit}
-      />
-      {jsCode && <JankyScript adCode={jsCode} />}
-      <div
-        dangerouslySetInnerHTML={{
-          __html: pageContent,
-        }}
-      />
+      <div >
+        <InputForm
+          textInput={textInput}
+          setTextInput={setTextInput}
+          handleTextSubmit={handleTextSubmit}
+          handleShare={handleShare}
+        />
+        <Spinner isLoading={isLoading}/>
+        {jsCode && <JankyScript adCode={jsCode} />}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: pageContent,
+          }}
+        />
+      </div>
     </>
   );
 }
