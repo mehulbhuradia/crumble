@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import openai
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
+import pymongo
+from bson.objectid import ObjectId
 
 load_dotenv()
 
@@ -19,6 +21,17 @@ app.add_middleware(
 
 openai.api_key = os.getenv('GPT_API_KEY')
 
+client = pymongo.MongoClient(os.getenv('MONGO_URI'))
+db_list = client.list_database_names()
+
+db_name = os.getenv('DATABASE_NAME')
+# Check if the database already exists
+if db_name in db_list:
+    print("The database already exists.")
+else:
+    # Create a new database
+    db = client[db_name]
+    print("The database has been created.")
 
 class MagicInput(BaseModel):
     textInput: str
@@ -27,8 +40,7 @@ class MagicInput(BaseModel):
 @app.post("/api/magic")
 async def magic(input_data: MagicInput):
     textInput = input_data.textInput
-    pageContent = input_data.pageContent
-    
+    pageContent = input_data.pageContent    
     gpt_prompt = f"""HTML:
 
     {pageContent}
@@ -58,6 +70,29 @@ async def magic(input_data: MagicInput):
     except Exception as error:
         print("Error in OpenAI API call:", error)
         return {"error": "Error in OpenAI API call"}
+
+
+@app.post("/api/save")
+async def magic(pageContent: str):
+
+    # insert the page content into the database
+    page_id = db.pages_collection.insert_one({"content": pageContent}).inserted_id
+    
+    # return the database id as a string
+    return str(page_id)
+
+@app.get("/api/find")
+async def get_page_content(site_id: str = Query(...)):
+
+    # find the page with the given ID in the database
+    page = db.pages_collection.find_one({"_id": ObjectId(site_id)})
+    
+    # if the page is not found, return an error message
+    if page is None:
+        return {"error": "Page not found"}
+    
+    # if the page is found, return its content
+    return {"content": page["content"]}
 
 if __name__ == "__main__":
     import uvicorn
