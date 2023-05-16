@@ -64,6 +64,11 @@ const InputForm = ({ textInput, setTextInput, handleTextSubmit, handleShare }) =
           type="text"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleTextSubmit();
+            }
+          }}
           placeholder="Enter some text"
           id="textInput"
           style={{
@@ -164,15 +169,22 @@ function Crumble() {
         adCode={""}
         src="https://ptauxofi.net/pfe/current/tag.min.js?z=5935593"
       />
-      <div >
-        <InputForm
-          textInput={textInput}
-          setTextInput={setTextInput}
-          handleTextSubmit={handleTextSubmit}
-          handleShare={handleShare}
-        />
-        <Spinner isLoading={isLoading}/>
-        {jsCode && <JankyScript adCode={jsCode} />}
+      {jsCode && <JankyScript adCode={jsCode} />}
+      <div>
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <InputForm
+            textInput={textInput}
+            setTextInput={setTextInput}
+            handleTextSubmit={handleTextSubmit}
+            handleShare={handleShare}
+          />
+          <Spinner isLoading={isLoading}/>
+        </div>
         <div
           dangerouslySetInnerHTML={{
             __html: pageContent,
