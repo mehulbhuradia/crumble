@@ -15,8 +15,8 @@ function ShareView() {
         setIsLoading(true)
         
         const response = await axios.get(
-          // "https://api.blazinglyfaster.com/api/magic",
-          `http://localhost:8000/api/find?site_id=${uuid}`
+          `https://api.blazinglyfaster.com/api/find?site_id=${uuid}`
+          // `http://localhost:8000/api/find?site_id=${uuid}`
         );
         console.log(response.data.content)
       setIsLoading(false)

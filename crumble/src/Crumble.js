@@ -119,8 +119,8 @@ function Crumble() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        // "https://api.blazinglyfaster.com/api/magic",
-        "http://localhost:8000/api/magic",
+        "https://api.blazinglyfaster.com/api/magic",
+        // "http://localhost:8000/api/magic",
         {
           textInput,
           pageContent,
@@ -148,8 +148,8 @@ function Crumble() {
     try {
       setIsLoading(true)
       const response = await axios.post(
-        // "https://api.blazinglyfaster.com/api/magic",
-        "http://localhost:8000/api/save",
+        "https://api.blazinglyfaster.com/api/save",
+        // "http://localhost:8000/api/save",
         {
           pageContent,
         }
