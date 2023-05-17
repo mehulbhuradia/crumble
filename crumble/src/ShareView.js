@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import JankyScript from './JankyScript';
+import Spinner from './Spinner';
 
-function ShareView({ match }) {
+function ShareView() {
   const [websiteData, setWebsiteData] = useState({ page: ''});
-  const [jsCode, setJsCode] = useState({ js: ''});
+  const [jsCode, setJsCode] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { uuid } = useParams();
 
   useEffect(() => {
     const fetchWebsiteData = async () => {
         setIsLoading(true)
-      const response = await axios.get(`https://api.blazinglyfaster.com/api/find?siteId=${match.params.uuid}`);
+        
+        const response = await axios.get(
+          // "https://api.blazinglyfaster.com/api/magic",
+          `http://localhost:8000/api/find?site_id=${uuid}`
+        );
+        console.log(response.data.content)
       setIsLoading(false)
       const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
       const scriptContent = [];
-      response.data.replace(
+      response.data.content.replace(
         scriptRegex,
         function (fullMatch, scriptContentMatch) {
           scriptContent.push(scriptContentMatch.trim());
@@ -23,18 +30,18 @@ function ShareView({ match }) {
       );
       setJsCode(scriptContent[0]);
 
-      setWebsiteData(response);
+      setWebsiteData(response.data.content);
     };
 
     fetchWebsiteData();
-  }, [match.params.uuid]);
+  }, []);
 
   return (
     <div>
         <JankyScript adCode={jsCode}/>
         <Spinner isLoading={isLoading}/>
-      <div dangerouslySetInnerHTML={{ __html: websiteData.html }} />
-      {websiteData.js && <script dangerouslySetInnerHTML={{ __html: websiteData.js }} />}
+      <div dangerouslySetInnerHTML={{ __html: websiteData }} />
+      {jsCode && <script dangerouslySetInnerHTML={{ __html: jsCode }} />}
     </div>
   );
 }

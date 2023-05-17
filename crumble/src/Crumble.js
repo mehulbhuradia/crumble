@@ -119,8 +119,8 @@ function Crumble() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://api.blazinglyfaster.com/api/magic",
-        // "http://localhost:8000/api/magic",
+        // "https://api.blazinglyfaster.com/api/magic",
+        "http://localhost:8000/api/magic",
         {
           textInput,
           pageContent,
@@ -147,7 +147,13 @@ function Crumble() {
   const handleShare = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.post('https://api.blazinglyfaster.com/api/store', { html: pageContent});
+      const response = await axios.post(
+        // "https://api.blazinglyfaster.com/api/magic",
+        "http://localhost:8000/api/save",
+        {
+          pageContent,
+        }
+      );
       setIsLoading(false)
       const uuid = response.data;
       const newLink = `https://blazinglyfaster.com/${uuid}`;
