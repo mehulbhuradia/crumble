@@ -1,15 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Crumble from './Crumble';
 import ShareView from './ShareView.js';
+import ReactDOM from "react-dom/client";
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Route path="/" exact component={Crumble} />
-      <Route path="/website/:uuid" component={ShareView} />
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route index exact element={<Crumble/>} />
+        <Route path="/:uuid" element={<ShareView/>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);

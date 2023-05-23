@@ -27,6 +27,7 @@ db_list = client.list_database_names()
 db_name = os.getenv('DATABASE_NAME')
 # Check if the database already exists
 if db_name in db_list:
+    db = client.db_name
     print("The database already exists.")
 else:
     # Create a new database
@@ -71,12 +72,14 @@ async def magic(input_data: MagicInput):
         print("Error in OpenAI API call:", error)
         return {"error": "Error in OpenAI API call"}
 
+class SaveInput(BaseModel):
+    pageContent: str
 
 @app.post("/api/save")
-async def magic(pageContent: str):
+async def magic(input_data: SaveInput):
 
     # insert the page content into the database
-    page_id = db.pages_collection.insert_one({"content": pageContent}).inserted_id
+    page_id = db.pages_collection.insert_one({"content": input_data.pageContent}).inserted_id
     
     # return the database id as a string
     return str(page_id)
