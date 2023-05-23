@@ -2,11 +2,10 @@
 version: "3"
 services:
   database:
-    container_name: grudge
     image: mongo:latest
     restart: always
     volumes:
-      - mongo_db:/data/db
+      - mongodata:/data/db
   web:
     depends_on:
       - database
@@ -26,4 +25,4 @@ services:
     ports:
       - 80:3000
 volumes:
-  mongo_db: {}
+  mongodata:
